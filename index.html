@@ -2,12 +2,28 @@
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script>
 <script src="webcam.js"></script>
+<script src="dataCollection.js"></script>
 </head>
 <body>
-	<div>
-		<div align="center">
-			<video autoplay playsinline muted id="wc" width="224" height="224"></video>
+	<div align ="center">
+		<div>
+			<div>
+				<video autoplay playsinline muted id="wc" width="300" height="300"></video>
+			</div>
 		</div>
+		<button type="button" id="0" onclick="handleButton(this)" >Yes</button>
+		<button type="button" id="1" onclick="handleButton(this)" >No</button>
+		<button type="button" id="2" onclick="handleButton(this)" >Callme</button>
+		<button type="button" id="3" onclick="handleButton(this)" >Peace</button>
+		<div id="yessamples">Yes Samples:</div>
+		<div id="nosamples">No Samples:</div>
+		<div id="callmesamples">Callme Samples:</div>
+		<div id="peacesamples">Peace Samples:</div>
+		<button type="button" id="train" onclick="doTraining()" >Train Network</button>
+		<div id="dummy">Once training is complete, click 'Start Predicting' to see predictions, and 'Stop Predicting' to end</div>
+		<button type="button" id="startPredicting" onclick="startPredicting()" >Start Predicting</button>
+		<button type="button" id="stopPredicting" onclick="stopPredicting()" >Stop Predicting</button>
+		<div id="prediction"></div>
 	</div>
 </body>
 
