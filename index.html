@@ -1,16 +1,19 @@
 <html>
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
 <script src="webcam.js"></script>
 <script src="dataCollection.js"></script>
 </head>
 <body>
 	<div align ="center">
+		<br/>
 		<div>
 			<div>
 				<video autoplay playsinline muted id="wc" width="300" height="300"></video>
 			</div>
 		</div>
+		<br/>
 		<button type="button" id="0" onclick="handleButton(this)" >Yes</button>
 		<button type="button" id="1" onclick="handleButton(this)" >No</button>
 		<button type="button" id="2" onclick="handleButton(this)" >Callme</button>

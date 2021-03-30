@@ -1,6 +1,7 @@
 let mobilenet;
 let model;
 const webcam = new Webcam(document.getElementById('wc'));
+console.log(webcam)
 const dataset = new handData();
 var yesSemple = 0, noSamples = 0, callMeSamples = 0, peaceSamples = 0;
 let isPredicting = false;
@@ -12,27 +13,35 @@ async function loadMobilenet() {
 }
 
 async function train() {
+    const metrics = ['loss', 'val_loss', 'accuracy', 'val_accuracy'];
+	const container = { name: 'Model Training', styles: { height: '640px' } };
+	const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
+
     dataset.ys = null;
-    dataset.encodeLabels(3);
+    dataset.encodeLabels(4);
     model = tf.sequential({
         layers: [
             tf.layers.flatten({ inputShape: mobilenet.outputs[0].shape.slice(1) }),
             tf.layers.dense({ units: 100, activation: 'relu' }),
-            tf.layers.dense({ units: 3, activation: 'softmax' })
+            tf.layers.dense({ units: 4, activation: 'softmax' })
         ]
     });
     const optimizer = tf.train.adam(0.0001);
     model.compile({ optimizer: optimizer, loss: 'categoricalCrossentropy' });
+    model.summary();
     let loss = 0;
+    tfvis.show.modelSummary({name: 'Model Architecture'}, model)
     model.fit(dataset.xs, dataset.ys, {
-        epochs: 10,
-        callbacks: {
-            onBatchEnd: async (batch, logs) => {
-                loss = logs.loss.toFixed(5);
-                console.log('LOSS: ' + loss);
-            }
-        }
+        epochs: 15,
+        callbacks: fitCallbacks
+        // callbacks: {
+        //     onBatchEnd: async (batch, logs) => {
+        //         loss = logs.loss.toFixed(5);
+        //         console.log('LOSS: ' + loss);
+        //     }
+        // }
     });
+    
 }
 
 
@@ -57,6 +66,7 @@ function handleButton(elem) {
     }
     label = parseInt(elem.id);
     const img = webcam.capture();
+    // console.log(typeof(img));
     dataset.addExample(mobilenet.predict(img), label);
 }
 
@@ -109,6 +119,7 @@ async function init() {
     await webcam.setup();
     mobilenet = await loadMobilenet();
     tf.tidy(() => mobilenet.predict(webcam.capture()));
+    
 }
 
 init();
